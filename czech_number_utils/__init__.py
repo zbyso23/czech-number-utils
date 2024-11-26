@@ -127,17 +127,18 @@ def replace_numbered_list_and_numbers(text):
         return ordinal_word
 
     def replace_inline_numbers(match):
-        number = int(match.group(0))
+        number = int(match.group(0).replace(" ", ""))  # Odstranění mezer z čísla
         return number_to_czech_word(number)
 
     text = re.sub(r"\b(\d+)\.\s", replace_list_items, text)
-    text = re.sub(r"\b\d+\b", replace_inline_numbers, text)
+    text = re.sub(r"\b\d{1,3}(?: \d{3})*\b", replace_inline_numbers, text)  # Čísla s mezerami
 
     return text
 
 # Example usage
 if __name__ == "__main__":
-    example_text = """1. Tohle je první
+    example_text = """
+1. Tohle je první
 2. Tohle je druhý.
 3. Tohle je třetí
 20. Tohle je dvacátý.
